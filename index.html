@@ -327,10 +327,10 @@ header h2, h3 {
 
             // Update elements with percentages (toFixed(2) for two decimals)
             const percentageElement1 = document.getElementById('percentageRange1');
-            percentageElement1.textContent = percentageRange1.toFixed(2) + '%';
+            percentageElement1.textContent = percentageRange1.toFixed(0) + '%';
 
             const percentageElement2 = document.getElementById('percentageRange2');
-            percentageElement2.textContent = percentageRange2.toFixed(2) + '%';
+            percentageElement2.textContent = percentageRange2.toFixed(0) + '%';
         }
 
         const btnCalcularPorcentajes = document.getElementById('btnCalcularPorcentajes');
