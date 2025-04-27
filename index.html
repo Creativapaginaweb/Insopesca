@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Muestreo de Sardina</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 </head>
 
 <body onload="verificarContraseña()">
@@ -495,6 +498,25 @@ duenosEmbarcaciones.forEach(function(item) {
 });
 
 
+
+
+
+// Obtener la imagen de la sardina
+const sardinaImg = document.querySelector('.sardina2');
+
+sardinaImg.addEventListener('click', function() {
+    html2canvas(document.body, {
+        useCORS: true
+    }).then(function(canvas) {
+        // Crear un enlace para descargar la imagen
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'captura_sardina.png';
+
+        // Simular un clic en el enlace para iniciar la descarga
+        link.click();
+    });
+});
     </script>
 
 </body>
