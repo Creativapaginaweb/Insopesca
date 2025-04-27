@@ -509,17 +509,22 @@ const sardinaImg = document.querySelector('.sardina2');
 
 sardinaImg.addEventListener('click', function() {
     html2canvas(document.body, {
-        useCORS: true
+        useCORS: true,
+        scale: 2 // para mayor resolución (HD)
     }).then(function(canvas) {
-        // Crear un enlace para descargar la imagen
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = 'captura_sardina.png';
-
-        // Simular un clic en el enlace para iniciar la descarga
-        link.click();
+        canvas.toBlob(function(blob) {
+            const link = document.createElement('a');
+            link.download = 'muestreo_sardina.png';
+            link.href = URL.createObjectURL(blob);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            alert('Captura guardada en Descargas. Ahora puedes compartirla por WhatsApp.');
+        }, 'image/png');
     });
 });
+
     </script>
 
 </body>
