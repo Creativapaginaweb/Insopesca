@@ -510,7 +510,7 @@ const sardinaImg = document.querySelector('.sardina2');
 sardinaImg.addEventListener('click', function() {
     html2canvas(document.body, {
         useCORS: true,
-        scale: 2 // para mayor resolución (HD)
+        scale: 4 // para mayor resolución (HD)
     }).then(function(canvas) {
         canvas.toBlob(function(blob) {
             const link = document.createElement('a');
@@ -520,10 +520,11 @@ sardinaImg.addEventListener('click', function() {
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(link.href);
-            alert('Captura guardada en Descargas. Ahora puedes compartirla por WhatsApp.');
+            // alert('Captura guardada en Descargas. Ahora puedes compartirla por WhatsApp.');
         }, 'image/png');
     });
 });
+
 
     </script>
 
