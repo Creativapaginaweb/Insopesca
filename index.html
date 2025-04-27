@@ -509,9 +509,10 @@ const sardinaImg = document.querySelector('.sardina2');
 
 sardinaImg.addEventListener('click', function() {
     html2canvas(document.body, {
-        useCORS: true,
-        scale: 3 // para mayor resolución (HD)
-    }).then(function(canvas) {
+    useCORS: true,
+    scale: 3,
+    foreignObjectRendering: true
+}).then(function(canvas) {
         canvas.toBlob(function(blob) {
             const link = document.createElement('a');
             link.download = 'muestreo_sardina.png';
