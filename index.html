@@ -508,10 +508,10 @@ duenosEmbarcaciones.forEach(function(item) {
 const sardinaImg = document.querySelector('.sardina2');
 
 sardinaImg.addEventListener('click', function() {
-    // 1. Clona el body
+    // Clona el body
     const bodyClone = document.body.cloneNode(true);
 
-    // 2. Reemplaza los inputs por spans en el clon
+    // Reemplaza los inputs por spans en el clon
     // Fecha
     const fechaInput = bodyClone.querySelector('#fecha');
     if (fechaInput) {
@@ -549,14 +549,17 @@ sardinaImg.addEventListener('click', function() {
         obsInput.parentNode.replaceChild(obsSpan, obsInput);
     }
 
-    // 3. Crea un contenedor oculto para el clon
+    // Crea un contenedor oculto para el clon
     const container = document.createElement('div');
     container.style.position = 'fixed';
     container.style.left = '-9999px';
+    container.style.width = '100%'; // Asegura que el ancho sea correcto
+    container.style.height = 'auto'; // Asegura que el alto sea correcto
+    container.style.overflow = 'visible'; // Para que se muestren todos los elementos
     container.appendChild(bodyClone);
     document.body.appendChild(container);
 
-    // 4. Espera a que las imágenes del clon se carguen
+    // Espera a que las imágenes del clon se carguen
     const images = bodyClone.querySelectorAll('img');
     let loaded = 0;
     if (images.length === 0) {
@@ -571,7 +574,7 @@ sardinaImg.addEventListener('click', function() {
     }
 
     function capturar() {
-        html2canvas(bodyClone, {
+        html2canvas(container, {
             useCORS: true,
             scale: 3,
             foreignObjectRendering: true
@@ -589,6 +592,7 @@ sardinaImg.addEventListener('click', function() {
         });
     }
 });
+
 
 
 
