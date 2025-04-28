@@ -509,17 +509,55 @@ duenosEmbarcaciones.forEach(function(item) {
 const sardinaImg = document.querySelector('.sardina2');
 
 sardinaImg.addEventListener('click', function() {
-    const scale = 3; // para mayor resolución HD
-    const node = document.body;
+    const node = document.body; // o un contenedor específico si quieres
 
-    domtoimage.toBlob(node, {
-        width: node.scrollWidth * scale,
-        height: node.scrollHeight * scale,
+    // Clonar el nodo para reemplazar inputs por texto
+    const clone = node.cloneNode(true);
+
+    // Función para reemplazar inputs por spans con su valor
+    function reemplazarInputs(clon) {
+        const inputs = clon.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            const span = document.createElement('span');
+            let valor = input.value;
+            // Formatear fecha si es input datetime-local
+            if (input.type === 'datetime-local' && valor) {
+                valor = new Date(valor).toLocaleString();
+            }
+            span.textContent = valor;
+            span.style.fontWeight = 'bold';
+            input.parentNode.replaceChild(span, input);
+        });
+    }
+
+    reemplazarInputs(clone);
+
+    // Opcional: reemplazar selects también si tienes
+
+    // Crear un contenedor oculto para el clon
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100vw';
+    container.style.height = 'auto';
+    container.style.opacity = '0';
+    container.style.pointerEvents = 'none';
+    container.style.zIndex = '-9999';
+    container.appendChild(clone);
+    document.body.appendChild(container);
+
+    // Configuración para dom-to-image-more, con escala para HD
+    const scale = 3;
+
+    domtoimage.toBlob(clone, {
+        width: clone.scrollWidth * scale,
+        height: clone.scrollHeight * scale,
         style: {
             transform: 'scale(' + scale + ')',
             transformOrigin: 'top left',
-            width: node.scrollWidth + 'px',
-            height: node.scrollHeight + 'px'
+            width: clone.scrollWidth + 'px',
+            height: clone.scrollHeight + 'px'
         }
     })
     .then(function(blob) {
@@ -530,11 +568,14 @@ sardinaImg.addEventListener('click', function() {
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(link.href);
+        document.body.removeChild(container);
     })
     .catch(function(error){
         console.error('Error al capturar la imagen:', error);
+        document.body.removeChild(container);
     });
 });
+
 
 
 
