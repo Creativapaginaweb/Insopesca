@@ -8,7 +8,8 @@
 
     <title>Muestreo de Sardina</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.9.0/dist/dom-to-image-more.min.js"></script>
+
 
 </head>
 
@@ -508,90 +509,33 @@ duenosEmbarcaciones.forEach(function(item) {
 const sardinaImg = document.querySelector('.sardina2');
 
 sardinaImg.addEventListener('click', function() {
-    // Clona el body
-    const bodyClone = document.body.cloneNode(true);
+    const scale = 3; // para mayor resolución HD
+    const node = document.body;
 
-    // Reemplaza los inputs por spans en el clon
-    // Fecha
-    const fechaInput = bodyClone.querySelector('#fecha');
-    if (fechaInput) {
-        const fechaValor = fechaInput.value;
-        const fechaSpan = document.createElement('span');
-        fechaSpan.textContent = fechaValor ? new Date(fechaValor).toLocaleString() : '';
-        fechaSpan.style.fontWeight = 'bold';
-        fechaInput.parentNode.replaceChild(fechaSpan, fechaInput);
-    }
-
-    // Dueño y Embarcación
-    const duenoInput = bodyClone.querySelector('#duenoEmbarcacion');
-    if (duenoInput) {
-        const duenoSpan = document.createElement('span');
-        duenoSpan.textContent = duenoInput.value;
-        duenoSpan.style.fontWeight = 'bold';
-        duenoInput.parentNode.replaceChild(duenoSpan, duenoInput);
-    }
-
-    // Responsable del Muestreo
-    const responsableInput = bodyClone.querySelector('#responsableMuestreo');
-    if (responsableInput) {
-        const responsableSpan = document.createElement('span');
-        responsableSpan.textContent = responsableInput.value;
-        responsableSpan.style.fontWeight = 'bold';
-        responsableInput.parentNode.replaceChild(responsableSpan, responsableInput);
-    }
-
-    // Observaciones
-    const obsInput = bodyClone.querySelector('#observaciones');
-    if (obsInput) {
-        const obsSpan = document.createElement('span');
-        obsSpan.textContent = obsInput.value;
-        obsSpan.style.fontWeight = 'bold';
-        obsInput.parentNode.replaceChild(obsSpan, obsInput);
-    }
-
-    // Crea un contenedor oculto para el clon
-    const container = document.createElement('div');
-    container.style.position = 'fixed';
-    container.style.left = '-9999px';
-    container.style.width = '100%'; // Asegura que el ancho sea correcto
-    container.style.height = 'auto'; // Asegura que el alto sea correcto
-    container.style.overflow = 'visible'; // Para que se muestren todos los elementos
-    container.appendChild(bodyClone);
-    document.body.appendChild(container);
-
-    // Espera a que las imágenes del clon se carguen
-    const images = bodyClone.querySelectorAll('img');
-    let loaded = 0;
-    if (images.length === 0) {
-        capturar();
-    } else {
-        images.forEach(img => {
-            img.onload = img.onerror = function() {
-                loaded++;
-                if (loaded === images.length) capturar();
-            };
-        });
-    }
-
-    function capturar() {
-        html2canvas(container, {
-            useCORS: true,
-            scale: 3,
-            foreignObjectRendering: true
-        }).then(function(canvas) {
-            canvas.toBlob(function(blob) {
-                const link = document.createElement('a');
-                link.download = 'captura_sardina.png';
-                link.href = URL.createObjectURL(blob);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(link.href);
-                document.body.removeChild(container); // Limpia el DOM
-            }, 'image/png');
-        });
-    }
+    domtoimage.toBlob(node, {
+        width: node.scrollWidth * scale,
+        height: node.scrollHeight * scale,
+        style: {
+            transform: 'scale(' + scale + ')',
+            transformOrigin: 'top left',
+            width: node.scrollWidth + 'px',
+            height: node.scrollHeight + 'px'
+        }
+    })
+    .then(function(blob) {
+        const link = document.createElement('a');
+        link.download = 'captura_sardina.png';
+        link.href = URL.createObjectURL(blob);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    })
+    .catch(function(error){
+        console.error('Error al capturar la imagen:', error);
+    });
 });
+
 
 
 
